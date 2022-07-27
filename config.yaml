@@ -1,0 +1,9 @@
+winlogbeat:
+  folder_address: "C:/Program Files (x86)/ELK Stack/winlogbeat"
+
+sysmon:
+  folder_address: "C:/Users/mrdor/OneDrive/Desktop/Logs"
+  log_fields: ['@timestamp', '@metadata', 'event', 'agent', 'ecs', 'log', 'message', 'host', 'winlog']
+
+wireshark:
+  interface: "Wi-Fi"
