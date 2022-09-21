@@ -2,8 +2,16 @@ winlogbeat:
   folder_address: "C:/Program Files (x86)/ELK Stack/winlogbeat"
 
 sysmon:
-  folder_address: "C:/Users/mrdor/OneDrive/Desktop/Logs"
+  folder_address: "C:/Users/mrdor/PycharmProjects/Hunterbee/tempfiles/Logs/Sysmon"
   log_fields: ['@timestamp', '@metadata', 'event', 'agent', 'ecs', 'log', 'message', 'host', 'winlog']
+  json_address: "C:/Users/mrdor/PycharmProjects/Hunterbee/tempfiles/Logs/Sysmon"
 
 wireshark:
   interface: "Wi-Fi"
+  packet_count: 5
+  pcap_address: "C:/Users/mrdor/PycharmProjects/Hunterbee/Logs/Wireshark/tempfiles/packets.pcap"
+  json_address: "C:/Users/mrdor/PycharmProjects/Hunterbee/Logs/Wireshark/tempfiles/packets.json"
+
+server:
+  address: "192.168.1.10"
+  port: 5050
