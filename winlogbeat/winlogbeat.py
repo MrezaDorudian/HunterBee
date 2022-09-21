@@ -28,3 +28,22 @@ def get_folder_address():
     with open('../config.yaml') as file:
         config = yaml.safe_load(file)
         return config['winlogbeat']['folder_address']
+
+
+# synchronize the output log file
+def set_winlogbeat_config():
+    with open('../config.yaml') as file:
+        config = yaml.safe_load(file)
+        folder_address = config['sysmon']['folder_address']
+
+    with open(f'{get_folder_address()}/winlogbeat.yml', 'r+') as file:
+        config = yaml.safe_load(file)
+        if config['output.file']['path'] != folder_address:
+            config['output.file']['path'] = folder_address
+            file.seek(0)
+            file.truncate()
+            yaml.dump(config, file)
+
+
+# utilities('stop')
+utilities('start')
