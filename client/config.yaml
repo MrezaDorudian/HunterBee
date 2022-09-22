@@ -8,9 +8,9 @@ sysmon:
 
 wireshark:
   interface: "Wi-Fi"
-  packet_count: 5
-  pcap_address: "C:/Users/mrdor/PycharmProjects/Hunterbee/Logs/Wireshark/tempfiles/packets.pcap"
-  json_address: "C:/Users/mrdor/PycharmProjects/Hunterbee/Logs/Wireshark/tempfiles/packets.json"
+  packet_count: 100
+  pcap_address: "C:/Users/mrdor/PycharmProjects/Hunterbee/tempfiles/Logs/Wireshark/packets.pcap"
+  json_address: "C:/Users/mrdor/PycharmProjects/Hunterbee/tempfiles/Logs/Wireshark"
 
 server:
   address: "192.168.1.10"

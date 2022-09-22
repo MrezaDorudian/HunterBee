@@ -1,11 +1,9 @@
 import os
 import subprocess
 import time
-import socket
-import threading
-import yaml
-
 import logs
+import utils
+
 
 def check_installed():
     try:
@@ -41,7 +39,7 @@ def set_config(file_address):
         print('Not installed')
 
 
-def save_logs():
+def start():
     if check_installed():
         while True:
             ndjson_folders = [x for x in os.listdir(logs.get_folder_address()) if x.count('.ndjson') > 0]
@@ -54,28 +52,9 @@ def save_logs():
                     os.remove(f'{logs.get_folder_address()}/{ndjson_folders[0]}')
 
                 if len(json_folders) > 1:
-                    send_to_server(f'{logs.get_folder_address()}/{json_folders[0]}')
+                    utils.send_to_server(f'{logs.get_folder_address()}/{json_folders[0]}')
                     os.remove(f'{logs.get_folder_address()}/{json_folders[0]}')
             else:
                 time.sleep(10)
     else:
         print('Not installed')
-
-
-def send_to_server(file_address):
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect(get_server_info())
-    #     send log files to server
-    with open(file_address, 'rb') as f:
-        client.send(f.read())
-    os.remove(file_address)
-
-
-
-def get_server_info():
-    with open('../config.yaml') as file:
-        config = yaml.safe_load(file)
-        return config['server']['address'], config['server']['port']
-
-
-save_logs()
