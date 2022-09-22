@@ -1,3 +1,4 @@
 .idea
 sysmon/__pycache__/
 tempfiles/
+*__pycache__
