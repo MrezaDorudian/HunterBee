@@ -1,53 +1,44 @@
-import pyshark
+import sys
+import time
 import os
-import json
-import yaml
-import utils
-
-
-# install wireshark & tshark and add tshark to environment variable
-
-
-def capture_packets():
-    config = get_config()
-    file_id = len([x for x in os.listdir(config['json_address']) if x.count('.json') > 0])
-    capture = pyshark.LiveCapture(interface=config['interface'], output_file=config['pcap_address'])
-    capture.sniff(packet_count=config['packet_count'])
-    os.system(f'tshark -r {config["pcap_address"]} -T json > {config["json_address"]}/packets_{file_id}.json')
-    reformat_json(f'{config["json_address"]}/packets_{file_id}.json')
-
-
-def reformat_json(file_address):
-    with open(file_address, 'r+') as f:
-        all_packets = json.load(f)
-        packet_data = {}
-        for index, packet in enumerate(all_packets):
-            layers = packet['_source']['layers']
-            layer_data = {}
-            for layer in layers:
-                layer_data[layer] = layers[layer]
-            packet_data[index] = layer_data
-        # delete file content
-        f.seek(0)
-        f.truncate()
-        json.dump(packet_data, f, indent=4)
-
-
-def get_config():
-    with open('../config.yaml') as file:
-        config = yaml.safe_load(file)
-        fields = {
-            'interface': config['wireshark']['interface'],
-            'packet_count': config['wireshark']['packet_count'],
-            'pcap_address': config['wireshark']['pcap_address'],
-            'json_address': config['wireshark']['json_address']
-        }
-        return fields
+import client.utils as utils
+import capture
 
 
 def start():
-    while True:
-        capture_packets()
+    try:
+        while True:
+            json_files = [x for x in os.listdir(capture.get_config()['address']) if x.count('.json') > 0]
+            # it will cause a bug without sorting
+            json_files.sort(key=lambda x: int(''.join(filter(str.isdigit, x))))
+            pcap_files = [x for x in os.listdir(capture.get_config()['address']) if x.count('.pcap') > 0]
+            pcap_files.sort(key=lambda x: int(''.join(filter(str.isdigit, x))))
+
+            if len(json_files) > 2 or len(pcap_files) > 2:
+                if len(pcap_files) > 2:
+                    os.remove(f'{capture.get_config()["address"]}/{pcap_files.pop(0)}')
+
+                if len(json_files) > 2:
+                    try:
+                        utils.send_to_server(f'{capture.get_config()["address"]}/{json_files[0]}')
+                        os.remove(f'{capture.get_config()["address"]}/{json_files.pop(0)}')
+                    except ConnectionRefusedError:
+                        print('server not listening')
+            else:
+                time.sleep(10)
+    except Exception as e:
+        print(e)
+        raise KeyboardInterrupt
 
 
-start()
+if __name__ == '__main__':
+    try:
+        capture.start()
+        start()
+    except KeyboardInterrupt:
+        time.sleep(1)
+        utils.send_remaining_files(capture.get_config()["address"], 'wireshark')
+        os.chdir(capture.get_config()["address"])
+        for file in os.listdir():
+            os.remove(file)
+        exit(-2)
