@@ -1,6 +1,3 @@
-import os
-import socket
-
 import yaml
 import ndjson
 import json
@@ -22,17 +19,17 @@ def read_logs(file_name, counter):
             iterator += 1
     # write output data as json file
     # json_address
-    with open('../config.yaml') as file:
+    with open(r'C:\Users\mrdor\PycharmProjects\Hunterbee\client\config.yaml') as file:
         config = yaml.safe_load(file)
-        json_address = config['sysmon']['json_address']
+        json_address = config['sysmon']['address']
     with open(f'{json_address}/sysmon-logs-{counter}.json', 'w') as f:
         json.dump(output_data, f, indent=4)
 
 
 def get_folder_address():
-    with open('../config.yaml') as file:
+    with open(r'C:\Users\mrdor\PycharmProjects\Hunterbee\client\config.yaml') as file:
         config = yaml.safe_load(file)
-        return config['sysmon']['folder_address']
+        return config['sysmon']['address']
 
 
 
