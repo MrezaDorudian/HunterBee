@@ -5,14 +5,18 @@ import yaml
 
 def send_to_server(file_address):
     file_name = file_address.split('/')[-1]
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect(get_server_info())
     # enlarge the file name size to 1024
     file_name = file_name.ljust(1024)
-    client.send(file_name.encode('utf-8'))
-    with open(file_address, 'rb') as f:
-        client.sendall(f.read())
-    client.close()
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        client.connect(get_server_info())
+        client.sendall(file_name.encode('utf-8'))
+        print(file_address)
+        with open(file_address, 'rb') as f:
+            client.sendall(f.read())
+        client.close()
+    except ConnectionRefusedError as e:
+        return True
 
 
 def send_remaining_files(folder_address, log_type):
@@ -30,13 +34,12 @@ def send_remaining_files(folder_address, log_type):
 
     json_files = [x for x in os.listdir(folder_address) if x.count('.json') > 0]
     for file in json_files:
-        try:
-            send_to_server(f'{folder_address}/{file}')
+        error = send_to_server(f'{folder_address}/{file}')
+        if error:
+            print('server not up (send_remaining_files)...')
+            break
+        else:
             os.remove(file)
-        except ConnectionRefusedError:
-            print('server not listening')
-
-    pass
 
 
 def get_server_info():
