@@ -1,84 +1,112 @@
-import os
+import json
 import subprocess
-import time
-import logs
-import client.utils as utils
-import client.winlogbeat.winlogbeat_interface as winlogbeat
+import ndjson
+from client.utils import *
+from winlogbeat.winlogbeat_interface import Winlogbeat
+from client import constants
 
 
-def check_installed():
-    try:
-        result = subprocess.run(['sysmon.exe'], capture_output=True, text=True)
-        if 'System Monitor' in result.stdout:
-            return True
-        else:
-            return False
-    except FileNotFoundError:
-        return False
+class Sysmon:
+    def __init__(self):
+        self.folder_address = None
+        self.load_folder_address()
+        self.basic_command = 'sysmon.exe'
+        self.installed = self.check_installed()
+        self.version = self.check_version()
+        self.winlogbeat = Winlogbeat()
 
+    def __str__(self):
+        return f'Sysmon Object\ninstalled: {self.installed}, version: {self.version}'
 
-def check_version():
-    if check_installed():
-        result = subprocess.run(['sysmon.exe'], capture_output=True, text=True)
-        version = result.stdout.split('\n')[1].split(' ')[2].strip()
-        return version
-    else:
-        return 'Not installed'
-
-
-def get_config():
-    if check_installed():
-        result = subprocess.run(['sysmon.exe', '-c'], capture_output=True, text=True)
-        config = f'configuration{"".join(result.stdout.split("Rule configuration")[1:])}'
-        print(config)
-
-
-def set_config(file_address):
-    if check_installed():
-        subprocess.run(['sysmon.exe', '-c', file_address])
-    else:
-        print('Not installed')
-
-
-def start():
-    if check_installed():
+    def check_installed(self):
         try:
-            winlogbeat.utilities('start')
-            while True:
-                ndjson_files = [x for x in os.listdir(logs.get_folder_address()) if x.count('.ndjson') > 0]
-                ndjson_files.sort(key=lambda x: int(''.join(filter(str.isdigit, x))))
-                json_files = [x for x in os.listdir(logs.get_folder_address()) if x.count('.json') > 0]
-                json_files.sort(key=lambda x: int(''.join(filter(str.isdigit, x))))
-                if len(ndjson_files) > 2 or len(json_files) > 2:
-                    if len(ndjson_files) > 2:
-                        file_id = ndjson_files[0].split('.')[0].split('-')[-1]
-                        logs.read_logs(ndjson_files[0], file_id)
-                        os.remove(f'{logs.get_folder_address()}/{ndjson_files.pop(0)}')
+            result = subprocess.run([self.basic_command], capture_output=True, text=True)
+            if 'System Monitor' in result.stdout:
+                return True
+            else:
+                return False
+        except FileNotFoundError:
+            return False
 
-                    if len(json_files) > 2:
-                        try:
-                            utils.send_to_server(f'{logs.get_folder_address()}/{json_files[0]}')
-                            os.remove(f'{logs.get_folder_address()}/{json_files.pop(0)}')
-                        except ConnectionRefusedError:
-                            print('server not listening')
-                else:
-                    time.sleep(10)
-        except Exception as e:
-            print(e)
-            raise KeyboardInterrupt
+    def check_version(self):
+        if self.installed:
+            result = subprocess.run([self.basic_command], capture_output=True, text=True)
+            version = result.stdout.split('\n')[1].split(' ')[2].strip()
+            return version
+        else:
+            return 'Not installed'
 
-    else:
-        print('Not installed')
+    def print_current_config(self):
+        if self.installed:
+            result = subprocess.run([self.basic_command, '-c'], capture_output=True, text=True)
+            config = f'configuration{"".join(result.stdout.split("Rule configuration")[1:])}'
+            print(config)
+
+    def set_config(self, file_address):
+        if self.installed:
+            subprocess.run([self.basic_command, '-c', file_address])
+        else:
+            print('Not installed')
+
+    def load_folder_address(self):
+        with open(constants.CLIENT_CONFIG_ADDRESS, 'r') as file:
+            config = yaml.safe_load(file)
+            self.folder_address = config['sysmon']['address']
+
+    def read_logs(self, file_name, file_id):
+        output_data = {}
+        iterator = 0
+        with open(f'{self.folder_address}/{file_name}') as f:
+            data = ndjson.load(f)
+            for item in data:
+                for key in ['@metadata', 'event', 'log', 'ecs', 'agent', 'message']:
+                    item.pop(key)
+                for key in ['user', 'process', 'record_id', 'api', 'opcode', 'event_id', 'version', 'channel']:
+                    item['winlog'].pop(key)
+                for key in ['os', 'mac', 'id', 'hostname', 'architecture']:
+                    item['host'].pop(key)
+                output_data[iterator] = item
+                iterator += 1
+        with open(constants.CLIENT_CONFIG_ADDRESS, 'r') as file:
+            config = yaml.safe_load(file)
+            json_address = config['sysmon']['address']
+        with open(f'{json_address}/sysmon-logs-{file_id}.json', 'w') as f:
+            json.dump(output_data, f, indent=4)
+
+    def handle_exit(self):
+        self.winlogbeat.utilities('stop')
+        send_remaining_files(self.folder_address, 'sysmon')
+        os.chdir(self.folder_address)
+        for file in os.listdir():
+            os.remove(file)
+        return
+
+    def start(self):
+        try:
+            if self.installed:
+                self.winlogbeat.restart()
+                while True:
+                    ndjson_files = get_file_list(self.folder_address, 'ndjson')
+                    json_files = get_file_list(self.folder_address, 'json')
+                    if len(ndjson_files) > constants.SENDING_DELAY or len(json_files) > constants.SENDING_DELAY:
+                        if len(ndjson_files) > constants.SENDING_DELAY:
+                            file_id = ndjson_files[0].split('.')[0].split('-')[-1]
+                            if int(file_id) > 9999999:
+                                file_id = '0'
+                            self.read_logs(ndjson_files[0], file_id)
+                            os.remove(f'{self.folder_address}/{ndjson_files.pop(0)}')
+
+                        if len(json_files) > constants.SENDING_DELAY:
+                            error = send_to_server(f'{self.folder_address}/{json_files[0]}')
+                            if not error:
+                                os.remove(f'{self.folder_address}/{json_files.pop(0)}')
+            else:
+                print('Not installed')
+        except KeyboardInterrupt:
+            self.handle_exit()
+            return
 
 
 if __name__ == '__main__':
-    try:
-        start()
-    except KeyboardInterrupt:
-        winlogbeat.utilities('stop')
-        time.sleep(1)
-        utils.send_remaining_files(logs.get_folder_address(), 'sysmon')
-        os.chdir(logs.get_folder_address())
-        for file in os.listdir():
-            os.remove(file)
-        exit(-1)
+    sysmon = Sysmon()
+    sysmon.start()
