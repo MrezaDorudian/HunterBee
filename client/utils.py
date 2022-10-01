@@ -1,21 +1,20 @@
 import os
 import socket
 import yaml
+import client.constants as constants
 
 
 def send_to_server(file_address):
     file_name = file_address.split('/')[-1]
-    # enlarge the file name size to 1024
     file_name = file_name.ljust(1024)
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         client.connect(get_server_info())
         client.sendall(file_name.encode('utf-8'))
-        print(file_address)
         with open(file_address, 'rb') as f:
             client.sendall(f.read())
         client.close()
-    except ConnectionRefusedError as e:
+    except ConnectionRefusedError:
         return True
 
 
@@ -32,17 +31,22 @@ def send_remaining_files(folder_address, log_type):
         if file_type in file:
             os.remove(file)
 
-    json_files = [x for x in os.listdir(folder_address) if x.count('.json') > 0]
+    json_files = get_file_list(folder_address, 'json')
     for file in json_files:
         error = send_to_server(f'{folder_address}/{file}')
         if error:
-            print('server not up (send_remaining_files)...')
             break
         else:
             os.remove(file)
 
 
 def get_server_info():
-    with open(r'C:\Users\mrdor\PycharmProjects\Hunterbee\client\config.yaml') as file:
+    with open(constants.CLIENT_CONFIG_ADDRESS, 'r') as file:
         config = yaml.safe_load(file)
         return config['server']['address'], config['server']['port']
+
+
+def get_file_list(folder_address, file_type):
+    target_file_list = [x for x in os.listdir(folder_address) if x.count(f'.{file_type}') > 0]
+    target_file_list.sort(key=lambda x: int(''.join(filter(str.isdigit, x))))
+    return target_file_list
