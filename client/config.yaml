@@ -1,17 +1,17 @@
 winlogbeat:
   address: "C:/Program Files (x86)/ELK Stack/winlogbeat"
-  bat_files_address: "C:/Users/mrdor/PycharmProjects/Hunterbee/client/winlogbeat/bat_files"
+  bat_files_address: "C:/Users/mrdor/PycharmProjects/Hunterbee/client/sysmon/winlogbeat/bat_files"
 
 sysmon:
-  address: "C:/Users/mrdor/PycharmProjects/Hunterbee/tempfiles/Logs/Sysmon"
+  address: "C:/Users/mrdor/PycharmProjects/Hunterbee/client/tempfiles/Logs/Sysmon"
   log_fields: [ '@timestamp', '@metadata', 'event', 'agent', 'ecs', 'log', 'message', 'host', 'winlog' ]
 
 wireshark:
   interface: "Wi-Fi"
   packet_count: 25
-  address: "C:/Users/mrdor/PycharmProjects/Hunterbee/tempfiles/Logs/Wireshark"
+  address: "C:/Users/mrdor/PycharmProjects/Hunterbee/client/tempfiles/Logs/Wireshark"
 
 server:
   downloads_address: "C:/Users/mrdor/PycharmProjects/Hunterbee/server/downloads"
   address: "localhost"
-  port: 5050
+  port: 6060
