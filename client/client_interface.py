@@ -1,15 +1,30 @@
 import multiprocessing
-from client.sysmon.sysmon_interface import Sysmon
-
+import os
+import constants
+import yaml
+import sysmon.sysmon_interface as sysmon
+import wireshark.wireshark_interface as wireshark
 
 if __name__ == '__main__':
-    sysmon = Sysmon()
     process_1 = multiprocessing.Process(target=sysmon.start)
-    process_1.daemon = True
+    process_2 = multiprocessing.Process(target=wireshark.start)
     process_1.start()
+    process_2.start()
     try:
         process_1.join()
+        process_2.join()
     except KeyboardInterrupt:
         process_1.terminate()
-        exit(-10)
-
+        process_2.terminate()
+    finally:
+        with open(constants.CLIENT_CONFIG_ADDRESS, 'r') as file:
+            config = yaml.safe_load(file)
+            sysmon_folder = config['sysmon']['address']
+            wireshark_folder = config['wireshark']['address']
+            os.chdir(sysmon_folder)
+            for _ in os.listdir():
+                os.remove(_)
+            os.chdir(wireshark_folder)
+            for _ in os.listdir():
+                os.remove(_)
+        exit(0)
