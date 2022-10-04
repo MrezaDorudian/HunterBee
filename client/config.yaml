@@ -12,6 +12,5 @@ wireshark:
   address: "C:/Users/mrdor/PycharmProjects/Hunterbee/client/tempfiles/Logs/Wireshark"
 
 server:
-  downloads_address: "C:/Users/mrdor/PycharmProjects/Hunterbee/server/downloads"
   address: "localhost"
   port: 6060
