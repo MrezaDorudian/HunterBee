@@ -2,7 +2,7 @@ import json
 import subprocess
 import ndjson
 from client.utils import *
-from winlogbeat.winlogbeat_interface import Winlogbeat
+from client.sysmon.winlogbeat.winlogbeat_interface import Winlogbeat
 from client import constants
 
 
@@ -59,18 +59,18 @@ class Sysmon:
         with open(f'{self.folder_address}/{file_name}') as f:
             data = ndjson.load(f)
             for item in data:
-                for key in ['@metadata', 'event', 'log', 'ecs', 'agent', 'message']:
-                    item.pop(key)
-                for key in ['user', 'process', 'record_id', 'api', 'opcode', 'event_id', 'version', 'channel']:
-                    item['winlog'].pop(key)
-                for key in ['os', 'mac', 'id', 'hostname', 'architecture']:
-                    item['host'].pop(key)
+                try:
+                    for key in ['@metadata', 'event', 'log', 'ecs', 'agent', 'message']:
+                        item.pop(key)
+                    for key in ['user', 'process', 'record_id', 'api', 'opcode', 'event_id', 'version', 'channel']:
+                        item['winlog'].pop(key)
+                    for key in ['os', 'mac', 'id', 'hostname', 'architecture']:
+                        item['host'].pop(key)
+                except KeyError:
+                    pass
                 output_data[iterator] = item
                 iterator += 1
-        with open(constants.CLIENT_CONFIG_ADDRESS, 'r') as file:
-            config = yaml.safe_load(file)
-            json_address = config['sysmon']['address']
-        with open(f'{json_address}/sysmon-logs-{file_id}.json', 'w') as f:
+        with open(f'{self.folder_address}/sysmon-logs-{file_id}.json', 'w') as f:
             json.dump(output_data, f, indent=4)
 
     def handle_exit(self):
@@ -82,31 +82,33 @@ class Sysmon:
         return
 
     def start(self):
-        try:
-            if self.installed:
-                self.winlogbeat.restart()
-                while True:
-                    ndjson_files = get_file_list(self.folder_address, 'ndjson')
-                    json_files = get_file_list(self.folder_address, 'json')
-                    if len(ndjson_files) > constants.SENDING_DELAY or len(json_files) > constants.SENDING_DELAY:
-                        if len(ndjson_files) > constants.SENDING_DELAY:
-                            file_id = ndjson_files[0].split('.')[0].split('-')[-1]
-                            if int(file_id) > 9999999:
-                                file_id = '0'
-                            self.read_logs(ndjson_files[0], file_id)
+        if self.installed:
+            self.winlogbeat.restart()
+            while True:
+                ndjson_files = get_file_list(self.folder_address, 'ndjson')
+                json_files = get_file_list(self.folder_address, 'json')
+                if len(ndjson_files) > constants.SENDING_DELAY or len(json_files) > constants.SENDING_DELAY:
+                    if len(ndjson_files) > constants.SENDING_DELAY:
+                        file_id = ndjson_files[0].split('.')[0].split('-')[-1]
+                        if int(file_id) > 9999999:
+                            file_id = '0'
+                        self.read_logs(ndjson_files[0], file_id)
+                        try:
                             os.remove(f'{self.folder_address}/{ndjson_files.pop(0)}')
-
-                        if len(json_files) > constants.SENDING_DELAY:
-                            error = send_to_server(f'{self.folder_address}/{json_files[0]}')
-                            if not error:
-                                os.remove(f'{self.folder_address}/{json_files.pop(0)}')
-            else:
-                print('Not installed')
-        except KeyboardInterrupt:
-            self.handle_exit()
-            return
+                        except FileNotFoundError:
+                            pass
+                    if len(json_files) > constants.SENDING_DELAY:
+                        error = send_to_server(f'{self.folder_address}/{json_files[0]}')
+                        if not error:
+                            os.remove(f'{self.folder_address}/{json_files.pop(0)}')
+        else:
+            print('Not installed')
 
 
-if __name__ == '__main__':
+def start():
     sysmon = Sysmon()
-    sysmon.start()
+    try:
+        sysmon.start()
+    except KeyboardInterrupt:
+        sysmon.handle_exit()
+        return

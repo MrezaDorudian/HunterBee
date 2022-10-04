@@ -10,7 +10,7 @@ class Winlogbeat:
         self.load_config()
         self.installed = self.check_installed()
         self.status = self.get_status()
-        self.synchronize_winlogbeat_config()
+        # self.synchronize_winlogbeat_config()
 
     def __str__(self):
         return f'Winlogbeat Object\ninstalled: {self.installed}, status: {self.status}'
@@ -33,7 +33,7 @@ class Winlogbeat:
         self.utilities('start')
 
     def utilities(self, command):
-        if self.installed:
+        if self.installed or command == 'install':
             try:
                 subprocess.run([f'{self.bat_file_addresses}/{command}.bat', self.folder_address])
             except FileNotFoundError:
