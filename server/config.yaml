@@ -2,3 +2,7 @@ server:
   downloads_address: "C:/Users/mrdor/PycharmProjects/Hunterbee/server/downloads"
   address: "localhost"
   port: 6060
+
+LogProcessor:
+  downloads_address: "C:/Users/mrdor/PycharmProjects/Hunterbee/server/downloads"
+  combined_logs_address: "C:/Users/mrdor/PycharmProjects/Hunterbee/server/combined_logs"
