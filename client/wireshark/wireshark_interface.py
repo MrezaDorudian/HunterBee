@@ -111,3 +111,6 @@ def start():
         capturer.start()
     except KeyboardInterrupt:
         handle_exit(wireshark.folder_address)
+
+
+start()
