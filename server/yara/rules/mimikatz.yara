@@ -1,5 +1,4 @@
 rule mimikatz_main {
-meta:
     strings:
         $exe_x86_1 = { 89 71 04 89 [0-3] 30 8d 04 bd }
         $exe_x86_2 = { 89 79 04 89 [0-3] 38 8d 04 b5 }
@@ -43,7 +42,7 @@ rule mimikatz_decryptkeysign {
 
 rule mimikatz_lsass_mdmp {
     strings:
-        $lsass            = “System32\\lsass.exe”    wide nocase
+        $lsass = "System32\\lsass.exe"
 
     condition:
         (uint32(0) == 0x504d444d) and $lsass
@@ -69,4 +68,12 @@ rule mimikatz_kirbi_ticket {
 
     condition:
         $asn1 at 0
+}
+
+rule test {
+    strings:
+        $asn1 = "sag"
+
+    condition:
+        $asn1
 }
