@@ -1,0 +1,327 @@
+{
+  "sag.exe": {
+    "hash": "2MMMD64DD3C7FE1E2B022B7AD73A1BA5",
+    "location": "C:\\Program Files\\Sage\\Sage 50 Accounting\\sag.exe",
+    "threat": "True"
+  },
+  "runnerw.exe": {
+    "hash": "23E6EC0009C0C7081DB498A691B89E87",
+    "location": "C:\\Program Files\\JetBrains\\PyCharm 2021.3\\bin\\runnerw.exe",
+    "threat": "False"
+  },
+  "git.exe": {
+    "hash": "E87C1D27A0D6D4B36F05407A40418E0D",
+    "location": "C:\\Program Files\\Git\\cmd\\git.exe",
+    "threat": "False"
+  },
+  "python.exe": {
+    "hash": "D59663B8D5F110F55EC5507C8DFDCC82",
+    "location": "C:\\Users\\mrdor\\PycharmProjects\\Hunterbee\\venv\\Scripts\\python.exe",
+    "threat": "False"
+  },
+  "dumpcap.exe": {
+    "hash": "A85C48F3129B10CF5593FBF3B02836FF",
+    "location": "C:\\Program Files\\Wireshark\\dumpcap.exe",
+    "threat": "False"
+  },
+  "tshark.exe": {
+    "hash": "2C7476F44C33FE4FE26600AE7AE3900D",
+    "location": "C:\\Program Files\\Wireshark\\tshark.exe",
+    "threat": "False"
+  },
+  "taskhostw.exe": {
+    "hash": "A00BF82660835224CD6606A248321C5D",
+    "location": "C:\\Windows\\System32\\taskhostw.exe",
+    "threat": "False"
+  },
+  "winlogbeat.exe": {
+    "hash": "A8E7365B50B82A8CCBA2D56DEE3EE37A",
+    "location": "C:\\winlogbeat\\winlogbeat.exe",
+    "threat": "False"
+  },
+  "dllhost.exe": {
+    "hash": "08EB78E5BE019DF044C26B14703BD1FA",
+    "location": "C:\\Windows\\System32\\dllhost.exe",
+    "threat": "False"
+  },
+  "notepad.exe": {
+    "hash": "27F71B12CB585541885A31BE22F61C83",
+    "location": "C:\\Windows\\System32\\notepad.exe",
+    "threat": "False"
+  },
+  "mimikatz.exe": {
+    "hash": "29EFD64DD3C7FE1E2B022B7AD73A1BA5",
+    "location": "C:\\Users\\WDAGUtilityAccount\\Desktop\\mimikatz_trunk\\x64\\mimikatz.exe",
+    "threat": "True"
+  },
+  "conhost.exe": {
+    "hash": "0D698AF330FD17BEE3BF90011D49251D",
+    "location": "C:\\Windows\\System32\\conhost.exe",
+    "threat": "False"
+  },
+  "openwith.exe": {
+    "hash": "E4A834784FA08C17D47A1E72429C5109",
+    "location": "C:\\Windows\\System32\\OpenWith.exe",
+    "threat": "False"
+  },
+  "mspaint.exe": {
+    "hash": "F221A4CCAFEC690101C59F726C95B646",
+    "location": "C:\\Windows\\System32\\mspaint.exe",
+    "threat": "False"
+  },
+  "svchost.exe": {
+    "hash": "B7F884C1B74A263F746EE12A5F7C9F6A",
+    "location": "C:\\Windows\\System32\\svchost.exe",
+    "threat": "False"
+  },
+  "backgroundtaskhost.exe": {
+    "hash": "DA7063B17DBB8BBB3015351016868006",
+    "location": "C:\\Windows\\System32\\backgroundTaskHost.exe",
+    "threat": "False"
+  },
+  "systemsettingsbroker.exe": {
+    "hash": "C0D134B5F3F4541B92342D62F2CA4DC9",
+    "location": "C:\\Windows\\System32\\SystemSettingsBroker.exe",
+    "threat": "False"
+  },
+  "wmiadap.exe": {
+    "hash": "None",
+    "location": "\\\\?\\C:\\Windows\\system32\\wbem\\WMIADAP.EXE",
+    "threat": "False"
+  },
+  "none": {
+    "hash": "-",
+    "location": "None",
+    "threat": "False"
+  },
+  "msedge.exe": {
+    "hash": "DD3A4DD70B67F66AF35B6C4F7CF5EEAE",
+    "location": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+    "threat": "False"
+  },
+  "smartscreen.exe": {
+    "hash": "None",
+    "location": "C:\\Windows\\System32\\smartscreen.exe",
+    "threat": "False"
+  },
+  "searchapp.exe": {
+    "hash": "None",
+    "location": "C:\\Windows\\SystemApps\\Microsoft.Windows.Search_cw5n1h2txyewy\\SearchApp.exe",
+    "threat": "False"
+  },
+  "backgroundtransferhost.exe": {
+    "hash": "None",
+    "location": "C:\\Windows\\System32\\BackgroundTransferHost.exe",
+    "threat": "False"
+  },
+  "explorer.exe": {
+    "hash": "None",
+    "location": "C:\\Windows\\Explorer.EXE",
+    "threat": "False"
+  },
+  "steam.exe": {
+    "hash": "None",
+    "location": "G:\\Steam\\Steam.exe",
+    "threat": "False"
+  },
+  "darksoulsremastered.exe": {
+    "hash": "384792EBF3C5743446ECB16B5641349C",
+    "location": "G:\\DARK SOULS REMASTERED\\DarkSoulsRemastered.exe",
+    "threat": "False"
+  },
+  "nvidia share.exe": {
+    "hash": "None",
+    "location": "C:\\Program Files\\NVIDIA Corporation\\NVIDIA GeForce Experience\\NVIDIA Share.exe",
+    "threat": "False"
+  },
+  "gamebar.exe": {
+    "hash": "None",
+    "location": "C:\\Program Files\\WindowsApps\\Microsoft.XboxGamingOverlay_5.822.9161.0_x64__8wekyb3d8bbwe\\GameBar.exe",
+    "threat": "False"
+  },
+  "oawrapper.exe": {
+    "hash": "None",
+    "location": "C:\\Users\\mrdor\\AppData\\Local\\NVIDIA\\NvBackend\\ApplicationOntology\\OAWrapper.exe",
+    "threat": "False"
+  },
+  "nvcontainer.exe": {
+    "hash": "None",
+    "location": "C:\\Program Files\\NVIDIA Corporation\\NvContainer\\nvcontainer.exe",
+    "threat": "False"
+  },
+  "sendctrlc.x64.b37c5e935f3da60b2940592241f826da.exe": {
+    "hash": "B37C5E935F3DA60B2940592241F826DA",
+    "location": "C:\\Users\\mrdor\\AppData\\Local\\JetBrains\\PyCharm2021.3\\tmp\\sendctrlc.x64.B37C5E935F3DA60B2940592241F826DA.exe",
+    "threat": "False"
+  },
+  "steamwebhelper.exe": {
+    "hash": "5E7D392B4C7E4DDC60C0AAF314BA8638",
+    "location": "G:\\Steam\\bin\\cef\\cef.win7x64\\steamwebhelper.exe",
+    "threat": "False"
+  },
+  "steamservice.exe": {
+    "hash": "21F5FE3A96BC977E4D598A8DE8A6C888",
+    "location": "C:\\Program Files (x86)\\Common Files\\Steam\\steamservice.exe",
+    "threat": "False"
+  },
+  "steamservicetmp.exe": {
+    "hash": "A213131C6430B72B05D9813F26E29CD0",
+    "location": "C:\\Program Files (x86)\\Common Files\\Steam\\SteamServiceTmp.exe",
+    "threat": "False"
+  },
+  "gldriverquery64.exe": {
+    "hash": "519CCD21FC4A0F26DEBD33320C50DF57",
+    "location": "G:\\Steam\\bin\\gldriverquery64.exe",
+    "threat": "False"
+  },
+  "gldriverquery.exe": {
+    "hash": "D6D6DDF71C2A46B4735C20EC16270AB6",
+    "location": "G:\\Steam\\bin\\gldriverquery.exe",
+    "threat": "False"
+  },
+  "vulkandriverquery64.exe": {
+    "hash": "F790F02165A1319BC8A148428D6D98A1",
+    "location": "G:\\Steam\\bin\\vulkandriverquery64.exe",
+    "threat": "False"
+  },
+  "vulkandriverquery.exe": {
+    "hash": "ABBEE67B65A284E4E687F7D7143DC3AA",
+    "location": "G:\\Steam\\bin\\vulkandriverquery.exe",
+    "threat": "False"
+  },
+  "trustedinstaller.exe": {
+    "hash": "D098F2FC042FBF6879D47E3A86FBB4A1",
+    "location": "C:\\Windows\\servicing\\TrustedInstaller.exe",
+    "threat": "False"
+  },
+  "microsoftedgeupdate.exe": {
+    "hash": "C019E421D9F897108E51666CBAE2C8B0",
+    "location": "C:\\Program Files (x86)\\Microsoft\\EdgeUpdate\\MicrosoftEdgeUpdate.exe",
+    "threat": "False"
+  },
+  "kmplayer64.exe": {
+    "hash": "2FB6C163E7FFAD0A429D947256E3E544",
+    "location": "C:\\Program Files\\KMPlayer 64X\\KMPlayer64.exe",
+    "threat": "False"
+  },
+  "kmploading.exe": {
+    "hash": "ED63535221A8E0E6B98B18C843B15D5A",
+    "location": "C:\\Program Files\\KMPlayer 64X\\KMPLoading.exe",
+    "threat": "False"
+  },
+  "virtualbox.exe": {
+    "hash": "4C0FF8975AB59F1C8F96305F80CB4AB1",
+    "location": "C:\\Program Files\\Oracle\\VirtualBox\\VirtualBox.exe",
+    "threat": "False"
+  },
+  "vboxsds.exe": {
+    "hash": "B9B40F4795DD8DF7DE8E8E9F36A63DB3",
+    "location": "C:\\Program Files\\Oracle\\VirtualBox\\VBoxSDS.exe",
+    "threat": "False"
+  },
+  "virtualboxvm.exe": {
+    "hash": "FFD53181A13265B398AF2FD73B1A0583",
+    "location": "C:\\Program Files\\Oracle\\VirtualBox\\VirtualBoxVM.exe",
+    "threat": "False"
+  },
+  "consent.exe": {
+    "hash": "DD5032EF160209E470E2612A8A3D5F59",
+    "location": "C:\\Windows\\System32\\consent.exe",
+    "threat": "False"
+  },
+  "vboxsvc.exe": {
+    "hash": "890F2BE83F16294BF83C2D0F26B86C9C",
+    "location": "C:\\Program Files\\Oracle\\VirtualBox\\VBoxSVC.exe",
+    "threat": "False"
+  },
+  "vboxnetdhcp.exe": {
+    "hash": "CEDD25B988E97817B3BABB78E6CE4D78",
+    "location": "C:\\Program Files\\Oracle\\VirtualBox\\VBoxNetDHCP.exe",
+    "threat": "False"
+  },
+  "idman.exe": {
+    "hash": "4B70944957B7F23793543E7AB80B34E9",
+    "location": "C:\\Program Files (x86)\\Internet Download Manager\\IDMan.exe",
+    "threat": "False"
+  },
+  "cmd.exe": {
+    "hash": "8A2122E8162DBEF04694B9C3E0B6CDEE",
+    "location": "C:\\Windows\\System32\\cmd.exe",
+    "threat": "False"
+  },
+  "gow.exe": {
+    "hash": "4C13BCCAD371792258133CB5F57BD559",
+    "location": "G:\\God of War\\GoW.exe",
+    "threat": "False"
+  },
+  "crs-handler.exe": {
+    "hash": "AF5D6E1947B24DD7EA39DF52365E9946",
+    "location": "G:\\God of War\\exec\\crs-handler.exe",
+    "threat": "False"
+  },
+  "lsass.exe": {
+    "hash": "None",
+    "location": "C:\\Windows\\System32\\lsass.exe",
+    "threat": "False"
+  },
+  "originwebhelperservice.exe": {
+    "hash": "None",
+    "location": "C:\\Program Files (x86)\\Origin\\OriginWebHelperService.exe",
+    "threat": "False"
+  },
+  "mkq.exe": {
+    "hash": "21C01F1342233BD390006EEDF80F66E5",
+    "location": "G:\\Mortal Kombat\\MKQ.exe",
+    "threat": "False"
+  },
+  "powershell.exe": {
+    "hash": "04029E121A0CFA5991749937DD22A1D9",
+    "location": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "threat": "False"
+  },
+  "slui.exe": {
+    "hash": "F82F4AAE1215418D43B0F9274CB19EA3",
+    "location": "C:\\Windows\\System32\\slui.exe",
+    "threat": "False"
+  },
+  "tiworker.exe": {
+    "hash": "5E5B4DFD8F87F3B4C907E7C872BC4866",
+    "location": "C:\\Windows\\WinSxS\\amd64_microsoft-windows-servicingstack_31bf3856ad364e35_10.0.19041.1940_none_7dd80d767cb5c7b0\\TiWorker.exe",
+    "threat": "False"
+  },
+  "sysmon.exe": {
+    "hash": "B92732DD99D5C20C95488D4DEFAB20EF",
+    "location": "C:\\Windows\\Sysmon.exe",
+    "threat": "unknown"
+  },
+  "copilot-agent-win.exe": {
+    "hash": "None",
+    "location": "C:\\Users\\mrdor\\AppData\\Roaming\\JetBrains\\PyCharm2021.3\\plugins\\github-copilot-intellij\\copilot-agent\\bin\\copilot-agent-win.exe",
+    "threat": "unknown"
+  },
+  "gamebarftserver.exe": {
+    "hash": "9A579E59778FC7C5DD71AAEB3D464D1B",
+    "location": "C:\\Program Files\\WindowsApps\\Microsoft.XboxGamingOverlay_5.822.9161.0_x64__8wekyb3d8bbwe\\GameBarFTServer.exe",
+    "threat": "unknown"
+  },
+  "comppkgsrv.exe": {
+    "hash": "CEFF6949F934D465DB8F19B07E81AC78",
+    "location": "C:\\Windows\\System32\\CompPkgSrv.exe",
+    "threat": "unknown"
+  },
+  "services.exe": {
+    "hash": "None",
+    "location": "C:\\Windows\\system32\\services.exe",
+    "threat": "unknown"
+  },
+  "spoolsv.exe": {
+    "hash": "None",
+    "location": "C:\\Windows\\System32\\spoolsv.exe",
+    "threat": "unknown"
+  },
+  "system": {
+    "hash": "None",
+    "location": "System",
+    "threat": "unknown"
+  }
+}
