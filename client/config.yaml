@@ -3,13 +3,13 @@ winlogbeat:
   bat_files_address: "C:/Users/mrdor/PycharmProjects/Hunterbee/client/sysmon/winlogbeat/bat_files"
 
 sysmon:
-  address: "C:/Users/mrdor/PycharmProjects/Hunterbee/client/tempfiles/Logs/Sysmon"
+  address: "C:/Users/mrdor/PycharmProjects/Hunterbee/client/tempfiles/logs/sysmon"
   log_fields: [ '@timestamp', '@metadata', 'event', 'agent', 'ecs', 'log', 'message', 'host', 'winlog' ]
 
 wireshark:
   interface: "Wi-Fi"
   packet_count: 25
-  address: "C:/Users/mrdor/PycharmProjects/Hunterbee/client/tempfiles/Logs/Wireshark"
+  address: "C:/Users/mrdor/PycharmProjects/Hunterbee/client/tempfiles/logs/wireshark"
 
 server:
   address: "localhost"
