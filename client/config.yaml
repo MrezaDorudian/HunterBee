@@ -7,7 +7,8 @@ sysmon:
   log_fields: [ '@timestamp', '@metadata', 'event', 'agent', 'ecs', 'log', 'message', 'host', 'winlog' ]
 
 wireshark:
-  interface: "Wi-Fi"
+#  interface: "Wi-Fi"
+  interface: "VirtualBox Host-Only Network"
   packet_count: 25
   address: "C:/Users/mrdor/PycharmProjects/Hunterbee/client/tempfiles/logs/wireshark"
 
