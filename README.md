@@ -1,7 +1,8 @@
-This project is my B.Sc. final project on the field of network security and specifically Threat Hunting.
-![Logo](https://github.com/MrezaDorudian/HunterBee/Logo.png)
+<p align="center">
+  <img src="https://github.com/MrezaDorudian/HunterBee/blob/main/Logo.png" />
+</p>  
 
-
+This project is my B.Sc. final project on the field of network security and specifically Threat Hunting.  
 
 First I gatered information about threat hunting and network security, consist of papers, open source projects,
 YouTube videos etc. that can be found on this [GitHub repository](https://github.com/MrezaDorudian/ThreatHunting)
