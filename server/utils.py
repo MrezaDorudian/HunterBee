@@ -1,6 +1,6 @@
 import os
 import requests
-import server.constants as constants
+from server.listener.listener import constants
 
 
 def get_file_list(folder_address):
