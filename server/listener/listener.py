@@ -1,7 +1,7 @@
 import os
 import socket
 import yaml
-import constants
+import server.constants as constants
 
 
 class Server:
