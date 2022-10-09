@@ -1,8 +1,8 @@
 import json
 import os
 import yaml
-import server.constants as constants
-import server.utils as utils
+from server import constants
+from server.utils import get_file_list
 
 
 class LogAggregator:
@@ -37,8 +37,8 @@ class LogAggregator:
     def start(self):
         print('LogAggregator started')
         while True:
-            sysmon_logs = utils.get_file_list(f'{self.downloads_address}/sysmon')
-            wireshark_logs = utils.get_file_list(f'{self.downloads_address}/wireshark')
+            sysmon_logs = get_file_list(f'{self.downloads_address}/sysmon')
+            wireshark_logs = get_file_list(f'{self.downloads_address}/wireshark')
             if len(sysmon_logs) >= constants.AGGREGATE_DELAY:
                 self.aggregate_logs(sysmon_logs[:constants.AGGREGATE_DELAY], 'sysmon')
                 self.info['sysmon']['log_id'] = 0

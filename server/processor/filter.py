@@ -8,8 +8,9 @@ import server.utils as utils
 
 
 class FeatureExtractor:
-    def __init__(self, file_address):
+    def __init__(self, file_address, log_type):
         self.file_address = file_address
+        self.log_type = log_type
         self.lightweight_log = dict()
         self.generated_dataset = None
 
@@ -17,28 +18,42 @@ class FeatureExtractor:
         pass
 
     def extract_features(self):
-        with open(self.file_address, 'r') as file:
-            file_data = {}
-            data = json.load(file)
-            for item in data:
-                new_data = {}
-                for key in constants.FEATURES:
-                    try:
-                        new_data[key] = data[item]['winlog']['event_data'][key]
-                    except KeyError:
-                        if key == 'Image':
+        try:
+            with open(self.file_address, 'r') as file:
+                file_data = {}
+                data = json.load(file)
+                for item in data:
+                    new_data = {}
+                    if self.log_type == 'sysmon':
+                        for key in constants.SYSMON_FEATURES:
                             try:
-                                new_data[key] = data[item]['winlog']['event_data']['Image'].split('\\')[-1]
-                            except Exception:
+                                new_data[key] = data[item]['winlog']['event_data'][key]
+                            except KeyError:
+                                if key == 'Image':
+                                    try:
+                                        new_data[key] = data[item]['winlog']['event_data']['Image'].split('\\')[-1]
+                                    except Exception:
+                                        new_data[key] = 'Other'
                                 new_data[key] = 'Other'
-                        new_data[key] = 'Other'
-                file_data[item] = new_data
-            self.lightweight_log = file_data
+                    elif self.log_type == 'wireshark':
+                        for key in constants.WIRESHARK_FEATURES:
+                            if 'ip' in key:
+                                new_data[key] = data[item]['ip'][key]
+                            elif 'tcp' in key:
+                                new_data[key] = data[item]['tcp'][key]
+                    file_data[item] = new_data
+                self.lightweight_log = file_data
+        except json.decoder.JSONDecodeError:
+            self.extract_features()
 
     def create_dataset(self):
         unique_data = dict()
-        for item in constants.FEATURES:
-            unique_data[item] = []
+        if self.log_type == 'sysmon':
+            for item in constants.SYSMON_FEATURES:
+                unique_data[item] = []
+        elif self.log_type == 'wireshark':
+            for item in constants.WIRESHARK_FEATURES:
+                unique_data[item] = []
 
         for item in self.lightweight_log:
             for key in unique_data.keys():
@@ -53,18 +68,22 @@ class FeatureExtractor:
             x_vector.append([_ for _ in self.lightweight_log[item].values()])
         self.generated_dataset = np.array(x_vector)
 
+        print(x_vector)
+        input('go?')
+
     def start(self):
         self.extract_features()
         self.create_dataset()
 
 
 class Clustering(KMeans):
-    def __init__(self, file_address):
+    def __init__(self, file_address, log_type):
         super().__init__(n_clusters=constants.CLUSTER_NUMBER)
         self.file_address = file_address
+        self.log_type = log_type
         self.filtered_logs_address = None
         self.load_config()
-        self.feature_extractor = FeatureExtractor(self.file_address)
+        self.feature_extractor = FeatureExtractor(self.file_address, self.log_type)
         self.feature_extractor.start()
         self.labels, self.indexes = self.get_logs_to_process()
 
@@ -118,12 +137,15 @@ class LogFilterer:
     def start(self):
         while True:
             aggregated_logs = utils.get_file_list(f'{self.aggregated_logs_address}/{self.log_type}')
-            if len(aggregated_logs) > 1:
-                clustering = Clustering(f'{self.aggregated_logs_address}/{self.log_type}/{aggregated_logs[0]}')
-                clustering.filter_logs(f'{self.filtered_logs_address}/{self.log_type}/filtered-logs-{aggregated_logs[0]}')
+            if len(aggregated_logs) > 0:
+                clustering = Clustering(f'{self.aggregated_logs_address}/{self.log_type}/{aggregated_logs[0]}', self.log_type)
+                clustering.filter_logs(
+                    f'{self.filtered_logs_address}/{self.log_type}/filtered-logs-{aggregated_logs[0]}')
                 os.remove(f'{self.aggregated_logs_address}/{self.log_type}/{aggregated_logs[0]}')
+                print(clustering.labels)
 
 
 if __name__ == '__main__':
-    log_filterer = LogFilterer('sysmon')
+    # log_filterer = LogFilterer('sysmon')
+    log_filterer = LogFilterer('wireshark')
     log_filterer.start()
