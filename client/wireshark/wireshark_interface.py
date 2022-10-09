@@ -30,9 +30,11 @@ class Capturer:
             packet_data = {}
             for index, packet in enumerate(all_packets):
                 layers = packet['_source']['layers']
-                layer_data = {}
-                for layer in layers:
-                    layer_data[layer] = layers[layer]
+                try:
+                    layer_data = {'ip': layers['ip'], 'tcp': layers['tcp']}
+                except KeyError:
+                    continue
+                print(layer_data)
                 packet_data[index] = layer_data
             f.seek(0)
             f.truncate()
@@ -40,6 +42,7 @@ class Capturer:
 
     def start(self):
         file_id = 0
+        capture = None
         while True:
             try:
                 capture = pyshark.LiveCapture(interface=self.interface,
@@ -53,6 +56,7 @@ class Capturer:
                 file_id += 1
                 capture.close()
             except Exception:
+                capture.close()
                 return
 
 
