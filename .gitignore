@@ -1,3 +1,8 @@
 .idea
 sysmon/__pycache__/
 *__pycache__
+main.py
+server/downloads
+server/combined_logs
+server/tempfiles
+*univ.xml
