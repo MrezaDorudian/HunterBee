@@ -34,7 +34,6 @@ class Capturer:
                     layer_data = {'ip': layers['ip'], 'tcp': layers['tcp']}
                 except KeyError:
                     continue
-                print(layer_data)
                 packet_data[index] = layer_data
             f.seek(0)
             f.truncate()
