@@ -35,12 +35,6 @@ class FeatureExtractor:
                                     except Exception:
                                         new_data[key] = 'Other'
                                 new_data[key] = 'Other'
-                    elif self.log_type == 'wireshark':
-                        for key in constants.WIRESHARK_FEATURES:
-                            if 'ip' in key:
-                                new_data[key] = data[item]['ip'][key]
-                            elif 'tcp' in key:
-                                new_data[key] = data[item]['tcp'][key]
                     file_data[item] = new_data
                 self.lightweight_log = file_data
         except json.decoder.JSONDecodeError:
@@ -50,9 +44,6 @@ class FeatureExtractor:
         unique_data = dict()
         if self.log_type == 'sysmon':
             for item in constants.SYSMON_FEATURES:
-                unique_data[item] = []
-        elif self.log_type == 'wireshark':
-            for item in constants.WIRESHARK_FEATURES:
                 unique_data[item] = []
 
         for item in self.lightweight_log:
@@ -67,9 +58,6 @@ class FeatureExtractor:
         for item in self.lightweight_log:
             x_vector.append([_ for _ in self.lightweight_log[item].values()])
         self.generated_dataset = np.array(x_vector)
-
-        print(x_vector)
-        input('go?')
 
     def start(self):
         self.extract_features()
@@ -138,14 +126,24 @@ class LogFilterer:
         while True:
             aggregated_logs = utils.get_file_list(f'{self.aggregated_logs_address}/{self.log_type}')
             if len(aggregated_logs) > 0:
-                clustering = Clustering(f'{self.aggregated_logs_address}/{self.log_type}/{aggregated_logs[0]}', self.log_type)
-                clustering.filter_logs(
-                    f'{self.filtered_logs_address}/{self.log_type}/filtered-logs-{aggregated_logs[0]}')
-                os.remove(f'{self.aggregated_logs_address}/{self.log_type}/{aggregated_logs[0]}')
-                print(clustering.labels)
+                if self.log_type == 'sysmon':
+                    clustering = Clustering(f'{self.aggregated_logs_address}/{self.log_type}/{aggregated_logs[0]}',
+                                            self.log_type)
+                    clustering.filter_logs(
+                        f'{self.filtered_logs_address}/{self.log_type}/filtered-logs-{aggregated_logs[0]}')
+                    os.remove(f'{self.aggregated_logs_address}/{self.log_type}/{aggregated_logs[0]}')
+                elif self.log_type == 'wireshark':
+                    # copy file
+                    try:
+                        with open(f'{self.aggregated_logs_address}/{self.log_type}/{aggregated_logs[0]}', 'r') as fin:
+                            data = json.load(fin)
+                        with open(f'{self.filtered_logs_address}/{self.log_type}/filtered-logs-{aggregated_logs[0]}', 'w') as fout:
+                            json.dump(data, fout)
+                            os.remove(f'{self.aggregated_logs_address}/{self.log_type}/{aggregated_logs[0]}')
+                    except json.decoder.JSONDecodeError:
+                        self.start()
 
 
 if __name__ == '__main__':
-    # log_filterer = LogFilterer('sysmon')
     log_filterer = LogFilterer('wireshark')
     log_filterer.start()

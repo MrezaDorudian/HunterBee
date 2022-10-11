@@ -41,8 +41,6 @@ class LogChecker:
                         database[key]['threat'] = result
                         self.update_database(database)
 
-
-
     def find_executables(self, file):
         try:
             with open(f'{self.filtered_log_address}/{self.log_type}/{file}', 'r') as f:
@@ -63,24 +61,41 @@ class LogChecker:
         except json.decoder.JSONDecodeError:
             self.find_executables(file)
 
+    def check_packets(self, file):
+        try:
+            with open(file, 'r') as f:
+                data = json.load(f)
+                for item in data:
+                    try:
+                        flags = int(data[item]['tcp']['tcp.flags'], 16)
+                        header_length = int(data[item]['tcp']['tcp.hdr_len'])
+                        if (flags <= 3) and (header_length <= 28):
+                            print(f'Nmap Stealth scanning detected from {data[item]["ip"]["ip.src"]}')
+                    except Exception:
+                        continue
+        except json.decoder.JSONDecodeError:
+            self.check_packets(file)
+
     def start(self):
         try:
             while True:
                 filtered_logs = utils.get_file_list(f'{self.filtered_log_address}/{self.log_type}')
                 if len(filtered_logs) > 0:
-                    executables, hashes, location = self.find_executables(filtered_logs[0])
-                    gathered_info = {}
-                    for i in range(len(executables)):
-                        if executables[i] not in gathered_info.keys():
-                            gathered_info[executables[i].lower()] = {'hash': hashes[i], 'location': location[i],
-                                                                     'threat': 'unknown'}
-                    print('file: ', filtered_logs[0])
-                    self.check_database(gathered_info)
+                    if self.log_type == 'sysmon':
+                        executables, hashes, location = self.find_executables(filtered_logs[0])
+                        gathered_info = {}
+                        for i in range(len(executables)):
+                            if executables[i] not in gathered_info.keys():
+                                gathered_info[executables[i].lower()] = {'hash': hashes[i], 'location': location[i],
+                                                                         'threat': 'unknown'}
+                        self.check_database(gathered_info)
+                    elif self.log_type == 'wireshark':
+                        self.check_packets(f'{self.filtered_log_address}/{self.log_type}/{filtered_logs[0]}')
                     os.remove(f'{self.filtered_log_address}/{self.log_type}/{filtered_logs[0]}')
         except TypeError:
             self.start()
 
 
 if __name__ == '__main__':
-    log_checker = LogChecker('sysmon')
+    log_checker = LogChecker('wireshark')
     log_checker.start()
