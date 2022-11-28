@@ -5,4 +5,8 @@ main.py
 server/downloads
 server/combined_logs
 *univ.xml
-server/database/*
+server/database/alerts.json
+server/database/database.json
+*.png
+dataset/*
+server/tempfiles/*
