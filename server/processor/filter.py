@@ -145,5 +145,5 @@ class LogFilterer:
 
 
 if __name__ == '__main__':
-    log_filterer = LogFilterer('wireshark')
+    log_filterer = LogFilterer('sysmon')
     log_filterer.start()

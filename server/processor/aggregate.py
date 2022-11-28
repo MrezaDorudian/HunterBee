@@ -24,12 +24,15 @@ class LogAggregator:
     def aggregate_logs(self, file_list, log_type):
         output = {}
         for file in file_list:
-            with open(f'{self.downloads_address}/{log_type}/{file}', 'r') as f:
-                data = json.load(f)
-                for item in data:
-                    output[self.info[log_type]['log_id']] = data[item]
-                    self.info[log_type]['log_id'] += 1
-            os.remove(f'{self.downloads_address}/{log_type}/{file}')
+            try:
+                with open(f'{self.downloads_address}/{log_type}/{file}', 'r') as f:
+                    data = json.load(f)
+                    for item in data:
+                        output[self.info[log_type]['log_id']] = data[item]
+                        self.info[log_type]['log_id'] += 1
+                os.remove(f'{self.downloads_address}/{log_type}/{file}')
+            except:
+                self.aggregated_logs_address(file, log_type)
         with open(f'{self.aggregated_logs_address}/{log_type}/aggregated-logs-{self.info[log_type]["file_id"]}.json',
                   'w') as f:
             json.dump(output, f, indent=4)
