@@ -2,12 +2,12 @@ import multiprocessing
 import os
 import constants
 import yaml
-import sysmon.sysmon_interface as sysmon
-import wireshark.wireshark_interface as wireshark
+from sysmon import sysmon_interface
+from wireshark import wireshark_interface
 
 if __name__ == '__main__':
-    process_1 = multiprocessing.Process(target=sysmon.start)
-    process_2 = multiprocessing.Process(target=wireshark.start)
+    process_1 = multiprocessing.Process(target=sysmon_interface.start)
+    process_2 = multiprocessing.Process(target=wireshark_interface.start)
     process_1.start()
     process_2.start()
     try:

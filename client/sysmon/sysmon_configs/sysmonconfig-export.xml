@@ -1,5 +1,5 @@
 <Sysmon schemaversion="4.82">
-    <HashAlgorithms>md5,sha256</HashAlgorithms>
+    <HashAlgorithms>md5</HashAlgorithms>
     <EventFiltering>
         <NetworkConnect onmatch="include"/>
         <ProcessTerminate onmatch="include"/>
@@ -19,8 +19,6 @@
             <Image condition="image">git.exe</Image>
             <Image condition="image">python.exe</Image>
             <Image condition="image">sysmon.exe</Image>
-
-
         </ProcessCreate>
         <ProcessAccess onmatch="include">
             <TargetImage condition="image">lsass.exe</TargetImage>

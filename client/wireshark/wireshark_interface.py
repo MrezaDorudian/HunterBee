@@ -116,4 +116,5 @@ def start():
         handle_exit(wireshark.folder_address)
 
 
-start()
+if __name__ == '__main__':
+    start()

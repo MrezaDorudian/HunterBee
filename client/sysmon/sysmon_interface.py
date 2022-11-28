@@ -107,8 +107,6 @@ class Sysmon:
 
 def start():
     sysmon = Sysmon()
-    # sysmon.set_config(r'C:\Users\mrdor\PycharmProjects\Hunterbee\client\sysmon\sysmon_configs\univ.xml')
-    # sysmon.read_logs(r'sysmon-logs-10.ndjson', '10')
     try:
         sysmon.start()
     except KeyboardInterrupt:
