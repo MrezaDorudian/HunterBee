@@ -17,7 +17,7 @@ The server-side program receives the logs from the clients and uses machine lear
 ---
 
 # Resources
-This repository includes a collection of resources on threat hunting and network security, including papers, open source projects, and YouTube videos. These resources can be found in the repository and may be useful for those interested in learning more about threat hunting and staying up-to-date on the latest techniques and tools. [GitHub repository](https://github.com/MrezaDorudian/ThreatHunting)
+[This repository](https://github.com/MrezaDorudian/ThreatHunting) includes a collection of resources on threat hunting and network security, including papers, open source projects, and YouTube videos. These resources can be found in the repository and may be useful for those interested in learning more about threat hunting and staying up-to-date on the latest techniques and tools. 
 
 # Contribution
 If you would like to contribute to this project, we welcome your contributions and would be glad to have your help. Please feel free to fork the repository and submit pull requests with any changes or additions that you think would be beneficial to the project.
